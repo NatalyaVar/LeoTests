@@ -18,10 +18,9 @@ public class DashboardTest extends LoginTest {
     WebDriverWait wait = new WebDriverWait(driver, 20);
 
 
-
     //Пример использования PO - DashboardPage
     @Test
-    public void NotificationTest() throws InterruptedException, IOException {
+    public void NotificationTest() throws IOException {
 
         DashboardPage dashboardPage = new DashboardPage();
         PageFactory.initElements(driver, dashboardPage);
@@ -29,6 +28,7 @@ public class DashboardTest extends LoginTest {
         WebElement content = dashboardPage.content;
         WebElement close_icon = dashboardPage.close_icon;
         WebElement panel = dashboardPage.panel;
+
         //Ждем, пока вверху страницы появится поле с заметками
         wait.until(ExpectedConditions.visibilityOf(content));
 
