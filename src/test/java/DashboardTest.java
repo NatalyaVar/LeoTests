@@ -3,35 +3,43 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
 public class DashboardTest extends LoginTest {
+    private static Logger log = (Logger) LoggerFactory.getLogger(DashboardTest.class);
 
-    WebDriverWait wait = new WebDriverWait(driver, 10);
+    WebDriverWait wait = new WebDriverWait(driver, 20);
 
 
 
+    //Пример использования PO - DashboardPage
     @Test
-    public void NotificTest() throws InterruptedException {
+    public void NotificationTest() throws InterruptedException, IOException {
 
+        DashboardPage dashboardPage = new DashboardPage();
+        PageFactory.initElements(driver, dashboardPage);
+
+        WebElement content = dashboardPage.content;
+        WebElement close_icon = dashboardPage.close_icon;
+        WebElement panel = dashboardPage.panel;
         //Ждем, пока вверху страницы появится поле с заметками
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable
-                (By.className("notification-content")));
+        wait.until(ExpectedConditions.visibilityOf(content));
 
-        System.out.println("Page title is: dashboard_2___" + driver.getTitle());
-        //Выводим на консоль содержимое заметки
-        System.out.println(driver.findElement(By.className("notification-content")).getText());
-
-        //Закрываем поле notification
-        driver.findElement(By.className("close-icon")).click();
+        //Пишем в файл текст заметки и закрываем ее
+        dashboardPage.Notification(driver, content, close_icon);
 
         //Убеждаемся, что поле notification стало невидимым
-        Boolean invisible;
-        invisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className
-                ("notification-panel mobile-panel")));
-        System.out.println("Element is invisible____" + invisible);
+        Boolean invisible = wait.until(ExpectedConditions.invisibilityOf(panel));
+        log.info("Element is invisible____" + invisible);
     }
+
 
     //При нажатии на логотипе и на кнопке "Задания" нет перехода на другую страницу
     @Test
